@@ -182,12 +182,18 @@ void config_print() {
     printf("\n\n\n\n\n\n\n\n");
 }
 
+#include <vector>
+
+std::vector<std::string> myVector;
+
+
 extern "C" void app_main() {
+
     config_print();
     nvs_init();
     sd_init();
     station_init();
-    csi_init((char *) "STA", &is_wifi_connected);
+    csi_init((char *) "STA");
 
 #if !(SHOULD_COLLECT_CSI)
     printf("CSI will not be collected. Check `idf.py menuconfig  # > ESP32 CSI Tool Config` to enable CSI");

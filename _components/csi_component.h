@@ -3,11 +3,14 @@
 
 #include "time_component.h"
 #include "math.h"
-//#include "post_component.h"
 #include <sstream>
 #include <iostream>
+#include <vector>
+
 
 char *project_type;
+
+extern std::vector<std::string> myVector;
 
 #define CSI_RAW 1
 #define CSI_AMPLITUDE 0
@@ -78,8 +81,7 @@ int8_t *my_ptr;
     }
 #endif
     ss << "]\n";
-
-//    send_post_request(ss.str().c_str());
+    myVector.emplace_back(ss.str().c_str());
     printf(ss.str().c_str());
     fflush(stdout);
     vTaskDelay(0);
@@ -91,7 +93,7 @@ void _print_csi_csv_header() {
     outprintf(header_str);
 }
 
-void csi_init(char *type, bool (*is_wifi_connected)()) {
+void csi_init(char *type) {
     project_type = type;
 
 #ifdef CONFIG_SHOULD_COLLECT_CSI
@@ -110,12 +112,6 @@ void csi_init(char *type, bool (*is_wifi_connected)()) {
     ESP_ERROR_CHECK(esp_wifi_set_csi_rx_cb(&_wifi_csi_cb, NULL));
 
     _print_csi_csv_header();
-    printf("is_wifi_connected?");
-    if (is_wifi_connected()) {
-        printf("connected!");
-    } else {
-        printf("not connected!");
-    }
 #endif
 }
 

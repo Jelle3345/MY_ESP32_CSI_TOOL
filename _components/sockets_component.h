@@ -13,8 +13,11 @@
 #include "esp_wifi.h"
 #include <esp_http_server.h>
 #include "post_component.h"
+#include <vector>
 
 char *data = (char *) "1\n";
+
+extern std::vector<std::string> myVector;
 
 void socket_transmitter_sta_loop(bool (*is_wifi_connected)()) {
     int socket_fd = -1;
@@ -55,7 +58,16 @@ void socket_transmitter_sta_loop(bool (*is_wifi_connected)()) {
                 printf("ERROR: wifi is not connected\n");
                 break;
             }
-            send_post_request("Whaaaaat?!");
+
+            if (myVector.size() > 2) {
+                std::string result;
+                for (const auto& word : myVector) {
+                    result += word;
+                }
+                myVector.clear();
+                send_post_request(result.c_str());
+            }
+
 
             if (sendto(socket_fd, &data, strlen(data), 0, (const struct sockaddr *) &caddr, sizeof(caddr)) !=
                 strlen(data)) {
