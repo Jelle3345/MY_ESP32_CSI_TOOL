@@ -26,8 +26,8 @@
  * If you'd rather not, just change the below entries to strings with
  * the config you want - ie #define ESP_WIFI_SSID "mywifissid"
  */
-#define ESP_WIFI_SSID      CONFIG_ESP_WIFI_SSID
-#define ESP_WIFI_PASS      CONFIG_ESP_WIFI_PASSWORD
+#define ESP_WIFI_SSID      "GNXF37360"
+#define ESP_WIFI_PASS      "SHME4KZY2WR9"
 
 #ifdef CONFIG_WIFI_CHANNEL
 #define WIFI_CHANNEL CONFIG_WIFI_CHANNEL

@@ -15,6 +15,28 @@
 
 char *data = (char *) "1\n";
 
+#include <esp_http_client.h>
+
+void send_post_request(const char* url, const char* data)
+{
+    esp_http_client_config_t config = {
+            .url = url,
+    };
+    esp_http_client_handle_t client = esp_http_client_init(&config);
+
+    esp_http_client_set_method(client, HTTP_METHOD_POST);
+    esp_http_client_set_post_field(client, data, strlen(data));
+
+    esp_err_t err = esp_http_client_perform(client);
+    if (err == ESP_OK) {
+        printf("POST request sent successfully\n");
+    } else {
+        printf("Failed to send POST request\n");
+    }
+
+    esp_http_client_cleanup(client);
+}
+
 void socket_transmitter_sta_loop(bool (*is_wifi_connected)()) {
     int socket_fd = -1;
     while (1) {
@@ -45,6 +67,8 @@ void socket_transmitter_sta_loop(bool (*is_wifi_connected)()) {
         }
 
         printf("sending frames.\n");
+
+
         double lag = 0.0;
         while (1) {
             double start_time = get_steady_clock_timestamp();
@@ -52,6 +76,7 @@ void socket_transmitter_sta_loop(bool (*is_wifi_connected)()) {
                 printf("ERROR: wifi is not connected\n");
                 break;
             }
+            send_post_request("http://192.168.1.129:80", "Whaaaaat?!");
 
             if (sendto(socket_fd, &data, strlen(data), 0, (const struct sockaddr *) &caddr, sizeof(caddr)) !=
                 strlen(data)) {
