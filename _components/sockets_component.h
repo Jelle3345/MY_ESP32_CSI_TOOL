@@ -59,13 +59,15 @@ void socket_transmitter_sta_loop(bool (*is_wifi_connected)()) {
                 break;
             }
 
-            if (myVector.size() > 2) {
-                std::string result;
-                for (const auto& word : myVector) {
-                    result += word;
+            if (myVector.size() > 2) { // 80 seems to be safe after this the memory seems to overflow
+                std::string allData;
+                for (const auto& someData : myVector) {
+                    allData += someData;
                 }
+                allData += std::to_string(myVector.size());
                 myVector.clear();
-                send_post_request(result.c_str());
+
+                send_post_request(allData.c_str());
             }
 
 
