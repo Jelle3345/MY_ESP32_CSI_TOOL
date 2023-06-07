@@ -6,10 +6,10 @@
 #include <esp_http_client.h>
 
 
-void send_post_request(const char* data)
-{
+void send_post_request(const char *data) {
     esp_http_client_config_t config = {
             .url = "http://192.168.1.129:80",
+            .keep_alive_enable = false,  // not sure if needed
     };
     esp_http_client_handle_t client = esp_http_client_init(&config);
 
