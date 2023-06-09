@@ -73,7 +73,6 @@ void socket_transmitter_sta_loop(bool (*is_wifi_connected)()) {
                 for (const auto &someData: myVector) {
                     allData += someData;
                 }
-                allData += std::to_string(myVector.size());
                 myVector.clear();
 
                 send_post_request(allData.c_str());
