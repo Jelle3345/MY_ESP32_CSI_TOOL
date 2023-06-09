@@ -26,8 +26,10 @@
  * If you'd rather not, just change the below entries to strings with
  * the config you want - ie #define ESP_WIFI_SSID "mywifissid"
  */
-#define ESP_WIFI_SSID      "GNXF37360"
-#define ESP_WIFI_PASS      "SHME4KZY2WR9"
+//#define ESP_WIFI_SSID      "GNXF37360"
+//#define ESP_WIFI_PASS      "SHME4KZY2WR9"
+#define ESP_WIFI_SSID      "esp32ap"
+#define ESP_WIFI_PASS      "myesp32ap123"
 
 #ifdef CONFIG_WIFI_CHANNEL
 #define WIFI_CHANNEL CONFIG_WIFI_CHANNEL
@@ -57,6 +59,12 @@
 #define SEND_CSI_TO_SD 1
 #else
 #define SEND_CSI_TO_SD 0
+#endif
+
+#ifdef CONFIG_SEND_CSI_OVER_WIFI
+#define SEND_CSI_OVER_WIFI 1
+#else
+#define SEND_CSI_OVER_WIFI 0
 #endif
 
 /* FreeRTOS event group to signal when we are connected*/
@@ -182,9 +190,11 @@ void config_print() {
     printf("\n\n\n\n\n\n\n\n");
 }
 
-#include <vector>
 
+#if (SEND_CSI_OVER_WIFI)
+#include <vector>
 std::vector<std::string> myVector;
+#endif
 
 
 extern "C" void app_main() {

@@ -64,4 +64,12 @@ menu "ESP32 CSI Tool Config"
             Sending data to an SD card can take time and buffer space.
             If your ESP32 does not have an SD card, there is no reason to use this feature.
             If you do though, the program will be recognize this and not attempt writing to the SD card.
+
+    config SEND_CSI_OVER_WIFI
+        depends on SHOULD_COLLECT_CSI
+        bool "Send CSI data over WiFi"
+        default "n"
+        help
+            Send CSI data over WiFi
+
 endmenu

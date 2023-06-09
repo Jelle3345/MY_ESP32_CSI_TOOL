@@ -8,7 +8,8 @@
 
 void send_post_request(const char *data) {
     esp_http_client_config_t config = {
-            .url = "http://192.168.1.129:80",
+            .url = "http://192.168.4.2:80",
+            .timeout_ms = 1000, // to keep going after the post fails
             .keep_alive_enable = false,  // not sure if needed
     };
     esp_http_client_handle_t client = esp_http_client_init(&config);

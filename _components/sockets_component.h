@@ -13,11 +13,20 @@
 #include "esp_wifi.h"
 #include <esp_http_server.h>
 #include "post_component.h"
-#include <vector>
+
+
+#ifdef CONFIG_SEND_CSI_OVER_WIFI
+#define SEND_CSI_OVER_WIFI 1
+#else
+#define SEND_CSI_OVER_WIFI 0
+#endif
 
 char *data = (char *) "1\n";
 
+#if (SEND_CSI_OVER_WIFI)
+#include <vector>
 extern std::vector<std::string> myVector;
+#endif
 
 void socket_transmitter_sta_loop(bool (*is_wifi_connected)()) {
     int socket_fd = -1;
@@ -58,10 +67,10 @@ void socket_transmitter_sta_loop(bool (*is_wifi_connected)()) {
                 printf("ERROR: wifi is not connected\n");
                 break;
             }
-
-            if (myVector.size() > 2) { // 80 seems to be safe after this the memory seems to overflow
+#if (SEND_CSI_OVER_WIFI)
+            if (myVector.size() >= 40) { // 80 seems to be safe after this the memory seems to overflow
                 std::string allData;
-                for (const auto& someData : myVector) {
+                for (const auto &someData: myVector) {
                     allData += someData;
                 }
                 allData += std::to_string(myVector.size());
@@ -69,6 +78,7 @@ void socket_transmitter_sta_loop(bool (*is_wifi_connected)()) {
 
                 send_post_request(allData.c_str());
             }
+#endif
 
 
             if (sendto(socket_fd, &data, strlen(data), 0, (const struct sockaddr *) &caddr, sizeof(caddr)) !=

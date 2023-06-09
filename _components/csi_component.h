@@ -1,16 +1,25 @@
 #ifndef ESP32_CSI_CSI_COMPONENT_H
 #define ESP32_CSI_CSI_COMPONENT_H
 
+#ifdef CONFIG_SEND_CSI_OVER_WIFI
+#define SEND_CSI_OVER_WIFI 1
+#else
+#define SEND_CSI_OVER_WIFI 0
+#endif
+
 #include "time_component.h"
 #include "math.h"
 #include <sstream>
 #include <iostream>
-#include <vector>
+
 
 
 char *project_type;
 
+#if (SEND_CSI_OVER_WIFI)
+#include <vector>
 extern std::vector<std::string> myVector;
+#endif
 
 #define CSI_RAW 1
 #define CSI_AMPLITUDE 0
@@ -61,7 +70,7 @@ void _wifi_csi_cb(void *ctx, wifi_csi_info_t *data) {
     int data_len = data->len;
 #endif
 
-int8_t *my_ptr;
+    int8_t *my_ptr;
 #if CSI_RAW
     my_ptr = data->buf;
     for (int i = 0; i < data_len; i++) {
@@ -81,10 +90,19 @@ int8_t *my_ptr;
     }
 #endif
     ss << "]\n";
-    myVector.emplace_back(ss.str().c_str());
+
     printf(ss.str().c_str());
     fflush(stdout);
     vTaskDelay(0);
+
+#if (SEND_CSI_OVER_WIFI)
+    myVector.emplace_back(ss.str().c_str());
+    if (myVector.size() >= 90) {
+        myVector.clear();  // for safety, in case the socket component is not able to get rid of the csi data
+    }
+#endif
+
+
     xSemaphoreGive(mutex);
 }
 

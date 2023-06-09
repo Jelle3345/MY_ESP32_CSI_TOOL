@@ -60,6 +60,12 @@
 #define SEND_CSI_TO_SD 0
 #endif
 
+#ifdef CONFIG_SEND_CSI_OVER_WIFI
+#define SEND_CSI_OVER_WIFI 1
+#else
+#define SEND_CSI_OVER_WIFI 0
+#endif
+
 /* FreeRTOS event group to signal when we are connected*/
 static EventGroupHandle_t s_wifi_event_group;
 
@@ -138,6 +144,11 @@ void config_print() {
     printf("-----------------------\n");
     printf("\n\n\n\n\n\n\n\n");
 }
+
+#if (SEND_CSI_OVER_WIFI)
+#include <vector>
+std::vector<std::string> myVector;
+#endif
 
 extern "C" void app_main() {
     config_print();
