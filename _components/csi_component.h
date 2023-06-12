@@ -15,6 +15,7 @@
 
 
 char *project_type;
+int csi_counter = 0
 
 #if (SEND_CSI_OVER_WIFI)
 #include <vector>
@@ -31,6 +32,9 @@ SemaphoreHandle_t mutex = xSemaphoreCreateMutex();
 
 void _wifi_csi_cb(void *ctx, wifi_csi_info_t *data) {
     xSemaphoreTake(mutex, portMAX_DELAY);
+
+    csi_counter++;
+
     std::stringstream ss;
 
     wifi_csi_info_t d = data[0];
@@ -38,6 +42,7 @@ void _wifi_csi_cb(void *ctx, wifi_csi_info_t *data) {
     sprintf(mac, "%02X:%02X:%02X:%02X:%02X:%02X", d.mac[0], d.mac[1], d.mac[2], d.mac[3], d.mac[4], d.mac[5]);
 
     ss << "CSI_DATA,"
+       << csi_counter << ","
        << project_type << ","
        << mac << ","
        // https://github.com/espressif/esp-idf/blob/9d0ca60398481a44861542638cfdc1949bb6f312/components/esp_wifi/include/esp_wifi_types.h#L314
