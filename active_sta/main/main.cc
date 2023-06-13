@@ -198,8 +198,18 @@ std::vector<std::string> myVector;
 
 
 extern "C" void app_main() {
-
     config_print();
+
+     char my_mac[20] = {0};
+    unsigned char mac_base[6] = {0};
+    esp_efuse_mac_get_default(mac_base);
+    esp_read_mac(mac_base, ESP_MAC_WIFI_STA);
+    sprintf(my_mac, "%02X:%02X:%02X:%02X:%02X:%02X", mac_base[0], mac_base[1], mac_base[2], mac_base[3], mac_base[4], mac_base[5]);
+    printf("\n\n\n");
+    printf("my mac: ");
+    printf("%s", my_mac);
+    printf("\n\n\n");
+
     nvs_init();
     sd_init();
     station_init();
