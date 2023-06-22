@@ -1,3 +1,7 @@
+# Sending CSI data over Wi-Fi
+Changes where made to the original to enalbe sending CSI data over Wi-Fi with POST requests. 
+
+
 # ESP32 CSI Tool
 
 [ESP32 CSI Tool Website](https://stevenmhernandez.github.io/ESP32-CSI-Tool/)
